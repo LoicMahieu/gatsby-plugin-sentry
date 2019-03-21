@@ -1,7 +1,7 @@
 {
   "name": "@loicmahieu/gatsby-plugin-sentry",
   "description": "Gatsby plugin to add Sentry error tracking to your site.",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "author": "Loic Mahieu <mahieuloic@gmail.com>",
   "repository": {
     "type": "git",
