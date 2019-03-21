@@ -1,39 +1,70 @@
+import React from 'react'
+import * as Sentry from '@sentry/browser'
+import { ErrorBoundaryFallbackComponent } from './components/ErrorBoundaryFallbackComponent'
 
-import * as Sentry from '@sentry/browser';
-
-exports.onClientEntry = function(_, pluginParams) {
-  Sentry.init(pluginParams)
+export const onClientEntry = (_, pluginParams) => {
+  if (process.env.NODE_ENV === 'production') {
+    Sentry.init(pluginParams)
+  }
 }
 
-exports.wrapRootElement = ({ element }) => (
-  <ErrorBoundary />
-)
+export const wrapRootElement = ({ element }) => {
+  if (process.env.NODE_ENV === 'production') {
+    return (
+      <ErrorBoundary
+        onError={errorHandler}
+        FallbackComponent={ErrorBoundaryFallbackComponent}
+      >
+        {element}
+      </ErrorBoundary>
+    )
+  } else {
+    return element
+  }
+}
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-      super(props);
-      this.state = { error: null };
+const errorHandler = (error, componentStack) => {
+  Sentry.withScope(scope => {
+    scope.setExtra('componentStack', componentStack)
+    Sentry.captureException(error)
+  })
+}
+
+class ErrorBoundary extends React.Component {
+  state = {
+    error: null,
+    info: null
   }
 
-  componentDidCatch(error, errorInfo) {
-    this.setState({ error });
-    Sentry.withScope(scope => {
-      Object.keys(errorInfo).forEach(key => {
-        scope.setExtra(key, errorInfo[key]);
-      });
-      Sentry.captureException(error);
-    });
+  componentDidCatch (error, info) {
+    const { onError } = this.props
+
+    if (typeof onError === 'function') {
+      try {
+        /* istanbul ignore next: Ignoring ternary; can’t reproduce missing info in test environment. */
+        errorHandler.call(this, error, info ? info.componentStack : '')
+      } catch (ignoredError) {}
+    }
+
+    this.setState({ error, info })
   }
 
-  render() {
-      if (this.state.error) {
-          //render fallback UI
-          return (
-            <a onClick={() => Sentry.showReportDialog()}>Report feedback</a>
-          );
-      } else {
-          //when there's not an error, render children untouched
-          return this.props.children;
-      }
+  render () {
+    const { children } = this.props
+    const { error, info } = this.state
+
+    if (error !== null) {
+      return (
+        <ErrorBoundaryFallbackComponent
+          componentStack={
+            // istanbul ignore next: Ignoring ternary; can’t reproduce missing info in test environment.
+            info ? info.componentStack : ''
+          }
+          error={error}
+        />
+      )
+    }
+
+    return children
   }
 }
