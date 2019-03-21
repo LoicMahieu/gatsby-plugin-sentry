@@ -4,7 +4,7 @@ Gatsby plugin to add Sentry error tracking to your site.
 
 ## Install
 
-`npm install --save gatsby-plugin-sentry`
+`npm install --save @loicmahieu/gatsby-plugin-sentry`
 
 ## How to use
 
