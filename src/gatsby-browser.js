@@ -1,6 +1,6 @@
 import React from 'react'
 import * as Sentry from '@sentry/browser'
-import { ErrorBoundaryFallbackComponent } from './components/ErrorBoundaryFallbackComponent'
+import { ErrorBoundaryFallbackComponent } from './ErrorBoundaryFallbackComponent'
 
 export const onClientEntry = (_, pluginParams) => {
   if (process.env.NODE_ENV === 'production') {
