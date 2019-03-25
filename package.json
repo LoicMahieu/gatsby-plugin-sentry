@@ -23,7 +23,7 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "@sentry/browser": "^5.0.0-beta1"
+    "@sentry/browser": "^5.0.0-rc.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
