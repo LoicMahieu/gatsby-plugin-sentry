@@ -23,12 +23,12 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "@sentry/browser": "^5.0.8"
+    "@sentry/browser": "^5.10.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "babel-preset-gatsby-package": "^0.1.4",
-    "cross-env": "^5.2.0"
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "babel-preset-gatsby-package": "^0.2.14",
+    "cross-env": "^6.0.3"
   }
 }
